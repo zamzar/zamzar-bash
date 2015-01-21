@@ -14,7 +14,7 @@ If you find any issues please raise them against this repository, since it is mo
  
         git clone git@github.com:zamzar/zamzar-bash.git
              
-    **OR** if you don't have git you can just download the script - don't forget to make it executable by running `chmod +x zamzar.sh` from your shell.
+    **OR** if you don't have git you can just download the script from [https://github.com/zamzar/zamzar-bash/raw/master/zamzar.sh](https://github.com/zamzar/zamzar-bash/raw/master/zamzar.sh) - don't forget to make it executable by running `chmod +x zamzar.sh` from your shell.
                
 * Edit your local copy of zamzar.sh to update it with your API key, replacing `FOO` (your key is available from [your account page](https://developers.zamzar.com/user)):
 
