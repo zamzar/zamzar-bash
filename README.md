@@ -26,7 +26,7 @@ If you find any issues please raise them against this repository, since it is mo
 
 * To find out what "to" formats are available for conversion for a given input file:
 
-        zamzar.sh ~/portrait.jpg
+        ./zamzar.sh ~/portrait.jpg
 
 	… should output:
 	
@@ -45,7 +45,7 @@ If you find any issues please raise them against this repository, since it is mo
 
 * To convert a file into a different format and automatically download and save it to your **current working directory** with the same name and the file extension of the converted format:
 
-        zamzar.sh ~/portrait.jpg png
+        ./zamzar.sh ~/portrait.jpg png
 
 	… should output:
 
@@ -55,11 +55,11 @@ If you find any issues please raise them against this repository, since it is mo
 	
 * To print out the version of the script being used:
 
-        zamzar.sh -v
+        ./zamzar.sh -v
 
 * To run a conversion in "debug" mode (useful for examining the cURL commands being run under the covers):
 
-        zamzar.sh -d ~/portrait.jpg png
+        ./zamzar.sh -d ~/portrait.jpg png
 
 # Further Reading
 
