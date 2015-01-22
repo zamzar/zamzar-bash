@@ -1,6 +1,6 @@
-# zamzar-cli Changelog
+# zamzar-bash Changelog
 
-Here you can see the full list of changes between each zamzar-cli release.
+Here you can see the full list of changes between each zamzar-bash release.
 
 # Version 1.0.0
 
