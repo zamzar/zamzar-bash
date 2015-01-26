@@ -39,7 +39,7 @@
 #############################################
 # Variables used for accessing the Zamzar API
 #############################################
-KEY='foo'        # Your API key - CHANGE THIS
+KEY='4614503075d6fe30d296ded61e1e4123a617c019'        # Your API key - CHANGE THIS
 SERVER='sandbox' # sandbox or api - CHANGE THIS IF YOU WANT TO USE THE LIVE ENVIRONMENT
 API_VERSION='v1' # API version to use - THIS SHOULD CHANGE RARELY
 #############################################
@@ -58,11 +58,11 @@ function version {
 
 # Prints usage information
 function usage {
-  echo 1>&2 "$scriptname: expected 1, 2 or 3 arguments but received $#"
-  echo Usage:
-  echo   $scriptname -v                          -- prints the version of this script
-  echo   $scriptname [-d] inputFile              -- list the possible formats to which this file can be converted
-  echo   $scriptname [-d] inputFile targetFormat -- convert the input file into the specified target format
+  echo 1>&2 "$scriptname: expected 1 to 4 arguments but received $#"
+  echo "Usage:"
+  echo "  $scriptname -v                                      -- prints the version of this script"
+  echo "  $scriptname [-d] inputFile                          -- list the possible formats to which this file can be converted"
+  echo "  $scriptname [-d] inputFile targetFormat [outputDir] -- convert the input file into the specified target format"
   exit 2
 }
 
@@ -144,15 +144,26 @@ function convert {
   do
     id=`echo $target_file | sed -e "s/.*{\"id\":\([0-9]*\).*/\1/g"`
     target_file_name=`echo $target_file | sed -e "s/.*\"name\":\"\([^\"]*\)\".*/\1/g"`
-    download "$id" "$target_file_name"
+    download "$id" "$target_file_name" "$3"
   done <<< "$target_files"
 }
 
 
 # Downloads a file with the specified ID to the specified location on disk
 function download {
-  apiCallWithRedirect "files/$1/content --silent" "$2"
-  echo "Converted file (id #$1) saved to: $2"
+  # Compute target path from target file name ($2) and target directory ($3)
+  if [[ -n $3 ]] && [[ $3 != "" ]]; then
+    case $3 in
+      */) target="$3$2";;   # target directory with a slash => concat($3, $2)
+      *)  target="$3/$2";;  # target directory without slash => concat($3, "/", $2)
+    esac
+  else
+    target="$2"             # no target directory => $2
+  fi
+  
+  # Request the file content and save it to the target path
+  apiCallWithRedirect "files/$1/content --silent" "$target"
+  echo "Converted file (id #$1) saved to: $target"
 }
 
 
@@ -199,16 +210,16 @@ elif [ $# -gt 0 ]; then
     
     if [ $# -eq 2 ]; then
       listFormats "$2"
-    elif [ $# -eq 3 ]; then
-      convert "$2" "$3"
+    elif [ $# -eq 3 ] || [ $# -eq 4 ]; then
+      convert "$2" "$3" "$4"
     else
       usage
     fi
   else
     if [ $# -eq 1 ]; then
       listFormats "$1"
-    elif [ $# -eq 2 ]; then
-      convert "$1" "$2"
+    elif [ $# -eq 2 ] || [ $# -eq 3 ]; then
+      convert "$1" "$2" "$3"
     else
       usage
     fi
