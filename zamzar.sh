@@ -116,12 +116,17 @@ function convert {
   status=`echo $api_response | sed -e "s/.*\"status\":\"\([^\"]*\)\".*/\1/g"`
   
   # Poll until job is finished
-  until [[ $status == "successful" ]]
-  do
+  until [[ $status == "successful" ]]; do
     sleep 1
     apiCall "jobs/$id --silent"
     status=`echo $api_response | sed -e "s/.*\"status\":\"\([^\"]*\)\".*/\1/g"`
-    echo "Job $id is $status"
+    
+    if [[ $status == "failed" ]]; then
+      echo "Job $id has failed for an unknown reason. For support, contact Zamzar at https://developers.zamzar.com/support"
+      exit 1
+    else
+      echo "Job $id is $status"
+    fi
   done
 
   echo "Downloading converted file(s) for job $id"
