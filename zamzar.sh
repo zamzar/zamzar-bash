@@ -39,7 +39,7 @@
 #############################################
 # Variables used for accessing the Zamzar API
 #############################################
-KEY='4614503075d6fe30d296ded61e1e4123a617c019'        # Your API key - CHANGE THIS
+KEY='foo'        # Your API key - CHANGE THIS
 SERVER='sandbox' # sandbox or api - CHANGE THIS IF YOU WANT TO USE THE LIVE ENVIRONMENT
 API_VERSION='v1' # API version to use - THIS SHOULD CHANGE RARELY
 #############################################
