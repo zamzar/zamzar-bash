@@ -53,6 +53,10 @@ If you find any issues please raise them against this repository, since it is mo
         Downloading converted file(s) for job 313
         Converted file (id #2870) saved to: portrait.png
 	
+* To convert a file into a different format and automatically download and save it to **a different directory**:
+
+        ./zamzar.sh ~/portrait.jpg png ~/Downloads/
+
 * To print out the version of the script being used:
 
         ./zamzar.sh -v

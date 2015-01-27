@@ -29,6 +29,8 @@
 # USAGE:
 #   Convert a file: 
 #     zamzar.sh ~/portrait.jpg png
+#   Convert a file specifying a different output directory: 
+#     zamzar.sh ~/portrait.jpg png ~/Downloads/
 #   List available target formats:
 #     zamzar.sh ~/portrait.jpg
 #   Run in debug mode:
