@@ -109,6 +109,11 @@ function convert {
   
   # Extract extension of second argument to determine target format
   target_format="${2##*.}" 
+
+  # Turn off the internal field separator as filenames can contain
+  # *any* character, and so Bash must not perform fancy substitution
+  # on anything!
+  IFS=""
   
   # Submit the job to Zamzar
   apiCall "jobs -X POST -F \"source_file=@$1\" -F \"target_format=$target_format\" --silent"
@@ -134,6 +139,7 @@ function convert {
   echo "Downloading converted file(s) for job $id"
 
   # Obtain the list of files created by the conversion job
+  # splitting each file onto a new line
   target_files=`
     echo $api_response |
     sed -e "s/.*\"target_files\":\(\[.*\]\).*/\1/g" |
@@ -141,11 +147,23 @@ function convert {
     sed '$d'
   `
   
+  # Set the internal field separator so that the following
+  # loop splits the target_files variable by newline
+  IFS="\n"
+  
   # Download all files
   while read -r target_file
   do
+    # Turn off the internal field separator as filenames can contain
+    # *any* character, and so Bash must not perform fancy substitution
+    # on anything!
+    IFS=""
+    
+    # Extract ID and target filename for the current file
     id=`echo $target_file | sed -e "s/.*{\"id\":\([0-9]*\).*/\1/g"`
     target_file_name=`echo $target_file | sed -e "s/.*\"name\":\"\([^\"]*\)\".*/\1/g"`
+
+    # Download the current file
     download "$id" "$target_file_name" "$3"
   done <<< "$target_files"
 }
@@ -182,7 +200,6 @@ function apiCall {
   # Check to see if any errors were encountered
   if [[ `echo $api_response` == *"errors"* ]]; then
     # If so, print and exit
-    # Print and exit
     echo "Error(s) were encountered whilst issuing an API request."
     echo "  Request: $api_request"
     echo "  Errors:"
@@ -195,7 +212,7 @@ function apiCall {
 # Makes a basic call to the Zamzar API, and redirects output to file
 function apiCallWithRedirect {
   api_request="curl -L https://$SERVER.zamzar.com/$API_VERSION/$1 -u $KEY:"
-  `curl -L https://$SERVER.zamzar.com/$API_VERSION/$1 -u $KEY: > "$2"`
+  `eval ${api_request} > "$2"`
 }
 
 #############################################
